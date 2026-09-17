@@ -75,7 +75,13 @@ export default function ClientAdmin() {
     </div>
   );
 
-  const activeClients = clients.filter((c) => c.lat != null && c.lng != null && c.status !== 'Offline');
+  const now = Date.now();
+  const activeClients = clients.filter((c) => {
+    if (c.lat == null || c.lng == null || c.status === 'Offline') return false;
+    if (!c.updated_at) return false;
+    const elapsed = now - new Date(c.updated_at).getTime();
+    return elapsed < 30000;
+  });
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column' }}>
@@ -113,9 +119,14 @@ export default function ClientAdmin() {
           </button>
 
           {sharing && (
-            <p style={{ marginTop: 8, fontSize: 12, color: '#0d652d', textAlign: 'center' }}>
-              Sharing live GPS...
-            </p>
+            <>
+              <p style={{ marginTop: 8, fontSize: 12, color: '#0d652d', textAlign: 'center' }}>
+                Sharing live GPS...
+              </p>
+              <p style={{ marginTop: 6, fontSize: 11, color: '#888', textAlign: 'center', lineHeight: 1.4 }}>
+                Sharing stops if the app is removed from background.<br />Press the Home button to minimize.
+              </p>
+            </>
           )}
 
           {client?.lat != null && client?.lng != null && (
