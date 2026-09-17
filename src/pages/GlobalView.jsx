@@ -34,8 +34,8 @@ export default function GlobalView() {
   const activeClients = clients.filter((c) => c.lat != null && c.lng != null && c.status !== 'Offline');
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <header style={{ background: '#1a73e8', color: 'white', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 1000, position: 'relative' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column' }}>
+      <header style={{ background: '#1a73e8', color: 'white', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 1000, position: 'relative', flexShrink: 0 }}>
         <h2 style={{ margin: 0, fontSize: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 20 }}>&#128205;</span>
           Find My Friends
@@ -48,8 +48,8 @@ export default function GlobalView() {
           <a href="/admin" style={{ color: 'white', fontSize: 12, textDecoration: 'none', opacity: 0.8 }}>Admin</a>
         </div>
       </header>
-      <div style={{ flex: 1 }}>
-        <MapView clients={activeClients} height="calc(100vh - 48px)" />
+      <div style={{ flex: 1, position: 'relative' }}>
+        <MapView clients={activeClients} height="100%" />
       </div>
     </div>
   );
