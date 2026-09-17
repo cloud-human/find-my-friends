@@ -67,7 +67,7 @@ function UserMarker({ client, color, editable, onPositionChange }) {
       <Popup maxWidth={220} minWidth={180}>
         <div style={{ padding: '10px 12px', fontFamily: '-apple-system, sans-serif' }}>
           <div style={{ fontWeight: 700, fontSize: 14, color: '#333', marginBottom: 4 }}>{client.name}</div>
-          <div style={{ fontSize: 12, color: '#888' }}>/{client.slug}</div>
+
           {client.description && <div style={{ fontSize: 12, color: '#555', marginTop: 6 }}>{client.description}</div>}
         </div>
       </Popup>
