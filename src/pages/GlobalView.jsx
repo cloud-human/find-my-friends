@@ -41,7 +41,7 @@ export default function GlobalView() {
     if (c.lat == null || c.lng == null || c.status === 'Offline') return false;
     if (!c.updated_at) return false;
     const elapsed = now - new Date(c.updated_at).getTime();
-    return elapsed < 30000;
+    return elapsed < 10000;
   });
 
   return (
