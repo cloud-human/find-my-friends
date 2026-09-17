@@ -34,6 +34,7 @@ function Recenter({ lat, lng }) {
 
 function UserMarker({ client, color, editable, onPositionChange }) {
   const letter = (client.name || client.slug || '?')[0].toUpperCase();
+  const stale = client.updated_at ? (Date.now() - new Date(client.updated_at).getTime()) > 10000 : false;
 
   const markerIcon = L.divIcon({
     className: '',
@@ -44,11 +45,26 @@ function UserMarker({ client, color, editable, onPositionChange }) {
       font-weight: 700; font-size: 16px; font-family: -apple-system, sans-serif;
       border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       cursor: ${editable ? 'grab' : 'default'};
+      ${stale ? 'opacity: 0.5;' : ''}
     ">${letter}</div>`,
     iconSize: [36, 36],
     iconAnchor: [18, 18],
     popupAnchor: [0, -22],
   });
+
+  const formatLastSeen = (ts) => {
+    if (!ts) return '';
+    const diff = Date.now() - new Date(ts).getTime();
+    const mins = Math.floor(diff / 60000);
+    const hrs = Math.floor(mins / 60);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const now = new Date();
+    const d = new Date(ts);
+    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    if (d.toDateString() === now.toDateString()) return `Today, ${time}`;
+    return `${d.toLocaleDateString()} ${time}`;
+  };
 
   return (
     <Marker
@@ -67,7 +83,11 @@ function UserMarker({ client, color, editable, onPositionChange }) {
       <Popup maxWidth={220} minWidth={180}>
         <div style={{ padding: '10px 12px', fontFamily: '-apple-system, sans-serif' }}>
           <div style={{ fontWeight: 700, fontSize: 14, color: '#333', marginBottom: 4 }}>{client.name}</div>
-
+          {stale && client.updated_at && (
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>
+              Last Seen - {formatLastSeen(client.updated_at)}
+            </div>
+          )}
           {client.description && <div style={{ fontSize: 12, color: '#555', marginTop: 6 }}>{client.description}</div>}
         </div>
       </Popup>

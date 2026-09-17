@@ -36,13 +36,7 @@ export default function GlobalView() {
     }
   };
 
-  const now = Date.now();
-  const activeClients = clients.filter((c) => {
-    if (c.lat == null || c.lng == null || c.status === 'Offline') return false;
-    if (!c.updated_at) return false;
-    const elapsed = now - new Date(c.updated_at).getTime();
-    return elapsed < 10000;
-  });
+  const activeClients = clients.filter((c) => c.lat != null && c.lng != null && c.status !== 'Offline');
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column' }}>
