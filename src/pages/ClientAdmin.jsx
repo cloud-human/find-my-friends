@@ -38,7 +38,7 @@ export default function ClientAdmin() {
   }, [slug]);
 
   const fetchClient = async () => {
-    const { data } = await supabase.from('clients').select('*').eq('slug', slug).maybeSingle();
+    const { data, error } = await supabase.from('clients').select('*').eq('slug', slug).maybeSingle();
     if (data) {
       setClient(data);
       setNotFound(false);
@@ -53,9 +53,13 @@ export default function ClientAdmin() {
     setSharing(true);
     setGeoError('');
     watchIdRef.current = navigator.geolocation.watchPosition(
-      (pos) => {
+      async (pos) => {
         const { latitude: lat, longitude: lng } = pos.coords;
-        supabase.from('clients').update({ lat, lng, updated_at: new Date().toISOString() }).eq('slug', slug);
+        const { error } = await supabase
+          .from('clients')
+          .update({ lat, lng, updated_at: new Date().toISOString() })
+          .eq('slug', slug);
+        if (error) console.error('Update failed:', error);
       },
       (err) => { setGeoError(err.message); setSharing(false); },
       { enableHighAccuracy: true, maximumAge: 0, distanceFilter: 1 }
@@ -96,10 +100,13 @@ export default function ClientAdmin() {
           </div>
           {client?.name || slug}
         </h2>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, padding: '4px 10px', borderRadius: 12, background: sharing ? 'rgba(76,175,80,0.3)' : 'rgba(255,255,255,0.15)' }}>
-          <span style={{ width: 7, height: 7, borderRadius: '50%', background: sharing ? '#4caf50' : '#f44336', animation: sharing ? 'pulse 1.5s infinite' : 'none' }} />
-          {sharing ? 'SHARING' : 'OFFLINE'}
-        </span>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <a href="/" style={{ color: 'white', fontSize: 12, textDecoration: 'none', opacity: 0.8 }}>Map</a>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, padding: '4px 10px', borderRadius: 12, background: sharing ? 'rgba(76,175,80,0.3)' : 'rgba(255,255,255,0.15)' }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: sharing ? '#4caf50' : '#f44336', animation: sharing ? 'pulse 1.5s infinite' : 'none' }} />
+            {sharing ? 'SHARING' : 'OFFLINE'}
+          </span>
+        </div>
       </header>
 
       <main style={{ maxWidth: 600, margin: '0 auto', padding: '16px' }}>

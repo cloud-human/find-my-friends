@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import MapView from '../components/MapView';
 
@@ -6,30 +6,32 @@ export default function GlobalView() {
   const [clients, setClients] = useState([]);
   const [connected, setConnected] = useState(false);
 
+  const loadClients = useCallback(async () => {
+    const { data, error } = await supabase.from('clients').select('*');
+    if (!error && data) {
+      setClients(data);
+    }
+  }, []);
+
   useEffect(() => {
     loadClients();
 
     const channel = supabase
       .channel('global-clients')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'clients' }, () => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'clients' }, (payload) => {
         loadClients();
       })
       .subscribe((status) => {
         setConnected(status === 'SUBSCRIBED');
       });
 
-    const poll = setInterval(loadClients, 5000);
+    const poll = setInterval(loadClients, 3000);
 
     return () => {
       supabase.removeChannel(channel);
       clearInterval(poll);
     };
-  }, []);
-
-  const loadClients = async () => {
-    const { data } = await supabase.from('clients').select('*');
-    setClients(data || []);
-  };
+  }, [loadClients]);
 
   const activeClients = clients.filter((c) => c.lat != null && c.lng != null && c.status !== 'Offline');
 
