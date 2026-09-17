@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ShareLogin from './pages/ShareLogin';
 import AdminPanel from './pages/AdminPanel';
 import ClientAdmin from './pages/ClientAdmin';
@@ -9,7 +9,7 @@ export default function App() {
       <Routes>
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/" element={<ShareLogin />} />
-        <Route path="*" element={<ClientAdmin />} />
+        <Route path="/:slug" element={<ClientAdmin />} />
       </Routes>
     </BrowserRouter>
   );
