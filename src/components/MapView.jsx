@@ -87,8 +87,8 @@ export default function MapView({
 
   if (single && (lat == null || lng == null)) return null;
 
-  const center = single ? [lat, lng] : [20, 0];
-  const zoom = single ? 15 : 2;
+  const center = single ? [lat, lng] : [20.5937, 78.9629];
+  const zoom = single ? 15 : 5;
 
   return (
     <div style={{ position: 'relative' }}>
