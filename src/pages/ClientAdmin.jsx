@@ -86,7 +86,7 @@ export default function ClientAdmin() {
           </div>
           {client?.name || slug}
         </h2>
-        <a href="/" style={{ color: 'white', fontSize: 12, textDecoration: 'none', opacity: 0.8 }}>Map</a>
+
       </header>
 
       <div style={{ flex: 1, position: 'relative' }}>
