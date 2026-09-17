@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
 export default function ShareLogin() {
   const [slugInput, setSlugInput] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('fmf_client_slug');
+    if (saved) {
+      window.location.href = `/${saved}`;
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,6 +22,7 @@ export default function ShareLogin() {
     const { data } = await supabase.from('clients').select('slug').eq('slug', slug).maybeSingle();
     setLoading(false);
     if (data) {
+      localStorage.setItem('fmf_client_slug', slug);
       window.location.href = `/${slug}`;
     } else {
       setError('Client not found');

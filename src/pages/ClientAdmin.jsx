@@ -92,7 +92,7 @@ export default function ClientAdmin() {
           </div>
           {client?.name || slug}
         </h2>
-
+        <button onClick={() => { localStorage.removeItem('fmf_client_slug'); stopSharing(); window.location.href = '/'; }} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>Logout</button>
       </header>
 
       <div style={{ flex: 1, position: 'relative' }}>
