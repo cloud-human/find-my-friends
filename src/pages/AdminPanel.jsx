@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
 export default function AdminPanel() {
-  const [authenticated, setAuthenticated] = useState(() => localStorage.getItem('fmf_admin_auth') === 'true');
+  const [authenticated, setAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
@@ -44,7 +44,6 @@ export default function AdminPanel() {
     const { data } = await supabase.from('config').select('value').eq('key', 'admin_password').maybeSingle();
     if (data && passwordInput === data.value) {
       setAuthenticated(true);
-      localStorage.setItem('fmf_admin_auth', 'true');
       setPasswordError('');
     } else {
       setPasswordError('Incorrect password');
@@ -110,7 +109,7 @@ export default function AdminPanel() {
         </h2>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <a href="/" style={{ color: 'white', fontSize: 12, textDecoration: 'none', opacity: 0.8 }}>Map</a>
-          <button onClick={() => { setAuthenticated(false); localStorage.removeItem('fmf_admin_auth'); setPasswordInput(''); setSelectedClientId(null); }} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 13 }}>Lock</button>
+          <button onClick={() => { setAuthenticated(false); setPasswordInput(''); setSelectedClientId(null); }} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 13 }}>Lock</button>
         </div>
       </header>
 
