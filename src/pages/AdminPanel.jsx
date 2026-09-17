@@ -19,6 +19,8 @@ export default function AdminPanel() {
 
   useEffect(() => {
     loadClients();
+    const poll = setInterval(loadClients, 5000);
+    return () => clearInterval(poll);
   }, []);
 
   useEffect(() => {

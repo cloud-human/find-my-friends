@@ -38,7 +38,7 @@ export default function ClientAdmin() {
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'clients' }, () => loadClients())
       .subscribe();
-    const poll = setInterval(() => { fetchClient(); loadClients(); }, 3000);
+    const poll = setInterval(() => { fetchClient(); loadClients(); }, 5000);
     return () => { supabase.removeChannel(channel); clearInterval(poll); };
   }, [slug]);
 

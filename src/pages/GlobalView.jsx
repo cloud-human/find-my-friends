@@ -20,7 +20,7 @@ export default function GlobalView() {
       .channel('global-clients')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'clients' }, () => loadClients())
       .subscribe((status) => setConnected(status === 'SUBSCRIBED'));
-    const poll = setInterval(loadClients, 3000);
+    const poll = setInterval(loadClients, 5000);
     return () => { supabase.removeChannel(channel); clearInterval(poll); };
   }, [loadClients]);
 
