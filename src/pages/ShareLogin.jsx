@@ -43,7 +43,6 @@ export default function ShareLogin() {
           </button>
         </form>
 
-        <a href="/admin" style={{ display: 'inline-block', marginTop: 20, fontSize: 12, color: '#aaa', textDecoration: 'none' }}>Admin</a>
       </div>
     </div>
   );
