@@ -11,8 +11,13 @@ const circleColors = [
   '#c2185b', '#00838f', '#f57f17', '#4527a0', '#1565c0',
 ];
 
-function getColor(index) {
-  return circleColors[index % circleColors.length];
+function getColor(id) {
+  let hash = 0;
+  const str = String(id);
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return circleColors[Math.abs(hash) % circleColors.length];
 }
 
 function ClickHandler({ onPositionChange }) {
@@ -135,7 +140,7 @@ export default function MapView({
               <UserMarker
                 key={c.id}
                 client={c}
-                color={getColor(i)}
+                color={getColor(c.id)}
               />
             )
           ))
