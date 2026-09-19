@@ -66,16 +66,19 @@ export default function ClientAdmin() {
 
   if (loading) return <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p style={{ color: '#888' }}>Loading...</p></div>;
 
-  if (notFound) return (
-    <div style={{ minHeight: '100vh', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ background: 'white', borderRadius: 12, padding: 40, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', textAlign: 'center' }}>
-        <div style={{ fontSize: 48, marginBottom: 16 }}>&#128269;</div>
-        <h3 style={{ marginTop: 0, marginBottom: 8 }}>Not Found</h3>
-        <p style={{ color: '#666', fontSize: 14 }}>No friend found for "{slug}".</p>
-        <a href="/" style={{ display: 'inline-block', marginTop: 12, padding: '10px 20px', background: '#1a73e8', color: 'white', borderRadius: 8, textDecoration: 'none', fontSize: 14 }}>Back to Map</a>
+  if (notFound) {
+    localStorage.removeItem('fmf_client_slug');
+    return (
+      <div style={{ minHeight: '100vh', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ background: 'white', borderRadius: 12, padding: 40, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', textAlign: 'center' }}>
+          <div style={{ fontSize: 48, marginBottom: 16 }}>&#128269;</div>
+          <h3 style={{ marginTop: 0, marginBottom: 8 }}>Not Found</h3>
+          <p style={{ color: '#666', fontSize: 14 }}>No friend found for "{slug}".</p>
+          <a href="/" style={{ display: 'inline-block', marginTop: 12, padding: '10px 20px', background: '#1a73e8', color: 'white', borderRadius: 8, textDecoration: 'none', fontSize: 14 }}>Back to Map</a>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 
   const activeClients = clients.filter((c) => c.lat != null && c.lng != null && c.status !== 'Offline' && c.slug !== 'admin2004');
 
