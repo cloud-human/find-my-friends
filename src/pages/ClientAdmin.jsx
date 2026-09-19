@@ -46,6 +46,7 @@ export default function ClientAdmin() {
     if (!navigator.geolocation) { setGeoError('Geolocation not supported'); return; }
     setSharing(true);
     setGeoError('');
+    if (window.AndroidBridge) window.AndroidBridge.startLocationService();
     watchIdRef.current = navigator.geolocation.watchPosition(
       async (pos) => {
         const { latitude: lat, longitude: lng } = pos.coords;
@@ -60,6 +61,7 @@ export default function ClientAdmin() {
   const stopSharing = () => {
     if (watchIdRef.current !== null) { navigator.geolocation.clearWatch(watchIdRef.current); watchIdRef.current = null; }
     setSharing(false);
+    if (window.AndroidBridge) window.AndroidBridge.stopLocationService();
   };
 
   if (loading) return <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p style={{ color: '#888' }}>Loading...</p></div>;
